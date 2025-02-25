@@ -1,17 +1,10 @@
 <?php
 session_start();
-include 'database.php';
-
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+if (!isset($_SESSION['admin_logged_in'])) {
     header("Location: login.php");
     exit;
 }
-
-if (isset($_POST['logout'])) {
-    session_destroy();
-    header("Location: front_page.php");
-    exit;
-}
+include 'database.php';
 
 $details_per_page = 3; 
 $total_books_sql = "SELECT COUNT(*) AS total_books FROM booksinfo";
@@ -83,8 +76,8 @@ $result = $conn->query($sql);
                     <td><?= $row['synopsis'] ?></td>
                     <td><?= $row['reviews'] ?></td>
                     <td>
-                        <a href="edit.php?id=<?= $row['book_ID'] ?>" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="delete.php?id=<?= $row['book_ID'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
+                        <a href="edit.php?id=<?= $row['book_ID'] ?>" class="btn btn-warning btn-sm mb-2">Edit</a>
+                        <a href="delete.php?id=<?= $row['book_ID'] ?>" class="btn btn-danger btn-sm mb-2" onclick="return confirm('Are you sure?')">Delete</a>
                     </td>
                 </tr>
             <?php endwhile; ?>
@@ -119,7 +112,7 @@ $result = $conn->query($sql);
         <a href="create.php" class="btn btn-success">Add New Book</a>
         <a href="front_page.php" class="btn btn-secondary">Back to Front Page</a>
         <form method="post">
-            <button type="submit" name="logout" class="btn btn-danger">Logout</button>
+        <a href="logout.php" class="btn btn-danger">Logout</a>
         </form>
     </div>
 </div>

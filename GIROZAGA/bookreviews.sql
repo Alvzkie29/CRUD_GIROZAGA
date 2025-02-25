@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 05, 2025 at 01:10 PM
+-- Generation Time: Feb 25, 2025 at 09:16 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -51,6 +51,19 @@ INSERT INTO `booksinfo` (`book_ID`, `book_name`, `genre`, `date_released`, `syno
 (19, 'To Kill a Mockingbird by Harper Lee', 'Domestic Fiction, Thriller', '1960-07-11', 'To Kill a Mockingbird is a 1961 novel by Harper Lee. Set in small-town Alabama, the novel is a bildungsroman, or coming-of-age story, and chronicles the childhood of Scout and Jem Finch as their father Atticus defends a Black man falsely accused of rape. Scout and Jem are mocked by classmates for this.', 'It is one of the best books that I read. Initially, when I was reading this novel, I did not like this novel.  But as soon as I read it, I started getting interested in this novel. if you understand its symbolic meaning and the depth of its themes. You have to look deep to realize that every letter in this book is placed with a purpose and cherish its developed characters.It\'s a story that revolves around a sibling which are Scout and Jem and their lives.', 'https://upload.wikimedia.org/wikipedia/commons/4/4f/To_Kill_a_Mockingbird_%28first_edition_cover%29.jpg'),
 (23, 'We Should all be Feminists by Chimamanda Ngozi Adi', 'Essay, Biography', '2014-07-19', 'We Should All Be Feminists is a book-length essay by the Nigerian author Chimamanda Ngozi Adichie. First published in 2014 by Fourth Estate, it talks about the definition of feminism for the 21st century.', 'I support Feminism, I think we should all be feminist, 6\'5 btw aha', 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1430821222i/22738563.jpg');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `user_id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Indexes for dumped tables
 --
@@ -62,6 +75,13 @@ ALTER TABLE `booksinfo`
   ADD PRIMARY KEY (`book_ID`);
 
 --
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`user_id`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -70,6 +90,12 @@ ALTER TABLE `booksinfo`
 --
 ALTER TABLE `booksinfo`
   MODIFY `book_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

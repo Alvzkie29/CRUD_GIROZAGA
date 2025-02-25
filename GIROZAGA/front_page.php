@@ -1,4 +1,9 @@
 <?php
+session_start();
+if (!isset($_SESSION['admin_logged_in'])) {
+    header("Location: login.php");
+    exit;
+}
 include "database.php";
 
 $books_per_page = 6;
@@ -72,7 +77,7 @@ $result = $conn->query($sql);
 <body>
 
 <div class="container mt-4">
-    <a href="login.php" class="btn btn-dark admin-btn">Admin</a>
+    <a href="index.php" class="btn btn-dark admin-btn">Admin</a>
     <h1 class="text-center mb-4">BOOKS LIST</h1>
     <div class="row">
         <?php while ($row = $result->fetch_assoc()) : ?>
