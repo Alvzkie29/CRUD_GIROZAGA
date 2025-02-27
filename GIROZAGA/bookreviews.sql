@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 25, 2025 at 09:16 AM
+-- Generation Time: Feb 27, 2025 at 10:43 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -61,8 +61,17 @@ CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `remember_token` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`user_id`, `username`, `password`, `created_at`, `remember_token`) VALUES
+(1, 'alvzkie29', '$2y$10$wR5cXGptbSL0bBmkvDvEQOOocTe8/HIx1OKoTZfWgU2m8R7yahEyO', '2025-02-25 08:38:00', NULL),
+(2, '123', '$2y$10$xZbZf5ritTqeLjxzv1LH3.LS5Z9Ji.Pz/M5IktpHCm.Yy4oNYMcM.', '2025-02-25 08:41:30', NULL);
 
 --
 -- Indexes for dumped tables
@@ -89,13 +98,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `booksinfo`
 --
 ALTER TABLE `booksinfo`
-  MODIFY `book_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `book_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

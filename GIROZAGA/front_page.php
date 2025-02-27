@@ -32,6 +32,7 @@ $result = $conn->query($sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Collection</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
             background-image: url('https://images5.alphacoders.com/134/thumb-1920-1346954.png'); 
@@ -41,8 +42,9 @@ $result = $conn->query($sql);
         }
         .admin-btn {
             position: absolute;
-            top: 20px;
+            top: 25px;
             right: 20px;
+            font-size: 20px;
         }
         .card {
             height: 100%;
@@ -77,8 +79,10 @@ $result = $conn->query($sql);
 <body>
 
 <div class="container mt-4">
-    <a href="index.php" class="btn btn-dark admin-btn">Admin</a>
-    <h1 class="text-center mb-4">BOOKS LIST</h1>
+    <a href="index.php" class="btn btn-primary admin-btn fa-solid fa-user-tie"> Admin</a>
+    <div class="text-center mb-4">
+        <h1 class="fa-solid fa-book text-dark bg-light"> BOOKS LIST</h1>
+    </div>
     <div class="row">
         <?php while ($row = $result->fetch_assoc()) : ?>
             <div class="col-md-4 mb-4">

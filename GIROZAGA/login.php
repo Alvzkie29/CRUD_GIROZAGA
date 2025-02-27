@@ -12,6 +12,7 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['login'])) {
     $username = trim($_POST['username']);
     $password = $_POST['password'];
+    $remember_me = isset($_POST['remember_me']); // Check if "Remember Me" is checked
 
     // Check credentials in the database
     $stmt = $conn->prepare("SELECT user_id, password FROM users WHERE username = ?");
@@ -26,6 +27,16 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['login'])) {
             $_SESSION['admin_logged_in'] = true;
             $_SESSION['user_id'] = $user_id;
             $_SESSION['username'] = $username;
+
+            if ($remember_me) {
+                $token = bin2hex(random_bytes(32)); // Generate a secure token
+                $stmt = $conn->prepare("UPDATE users SET remember_token = ? WHERE user_id = ?");
+                $stmt->bind_param("si", $token, $user_id);
+                $stmt->execute();
+
+                setcookie("remember_me", $token, time() + (86400 * 30), "/"); // Store for 30 days
+            }
+
             header("Location: index.php");
             exit;
         } else {
@@ -33,33 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['login'])) {
         }
     } else {
         $login_error = "User not found.";
-    }
-    $stmt->close();
-}
-
-// Handle signup form submission
-if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['signup'])) {
-    $username = trim($_POST['new_username']);
-    $password = $_POST['new_password'];
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-    // Check if username already exists
-    $stmt = $conn->prepare("SELECT user_id FROM users WHERE username = ?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $stmt->store_result();
-
-    if ($stmt->num_rows > 0) {
-        $signup_error = "Username already exists.";
-    } else {
-        // Insert new user
-        $stmt = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-        $stmt->bind_param("ss", $username, $hashed_password);
-        if ($stmt->execute()) {
-            $signup_success = "Account created! You can now log in.";
-        } else {
-            $signup_error = "Error: " . $stmt->error;
-        }
     }
     $stmt->close();
 }
@@ -90,26 +74,31 @@ $conn->close();
     </script>
 </head>
 <body>
-<div class="container mt-4">
-    <!-- Login Form -->
-    <div id="loginForm">
-        <h2 class="text-center">Login</h2>
-        <form action="" method="POST">
-            <input type="hidden" name="login">
-            <div class="mb-3">
-                <label>Username</label>
-                <input type="text" name="username" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label>Password</label>
-                <input type="password" name="password" class="form-control" required>
-            </div>
-            <?php if (isset($login_error)) : ?>
-                <div class="alert alert-danger"><?= $login_error ?></div>
-            <?php endif; ?>
-            <button type="submit" class="btn btn-success">Login</button>
-        </form>
-        <button class="btn btn-primary mt-3"   onclick="toggleForms()">Don't Have an account? Sign Up</button>
+    <div class="container mt-4">
+        <!-- Login Form -->
+        <div id="loginForm">
+            <h2 class="text-center">Login</h2>
+            <form action="" method="POST">
+                <input type="hidden" name="login">
+                <div class="mb-3">
+                    <label>Username</label>
+                    <input type="text" name="username" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label>Password</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+                <div  div class="mb-3">
+                    <input type="checkbox" name="remember_me" id="remember_me">
+                    <label for="remember_me">Remember me</label>
+                </div>
+                <?php if (isset($login_error)) : ?>
+                    <div class="alert alert-danger"><?= $login_error ?></div>
+                <?php endif; ?>
+                <button type="submit" class="btn btn-success">Login</button>
+            </form>
+            <button class="btn btn-primary mt-3" onclick="toggleForms()">Don't Have an account? Sign Up</button>
+        </div>
     </div>
 
     <!-- Signup Form -->
