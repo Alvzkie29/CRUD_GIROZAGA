@@ -1,10 +1,28 @@
 <?php
 session_start();
+include 'database.php';
+
+if (!isset($_SESSION['admin_logged_in']) && isset($_COOKIE['remember_me'])) {
+    $token = $_COOKIE['remember_me'];
+    $stmt = $conn->prepare("SELECT user_id, username FROM users WHERE remember_token = ?");
+    $stmt->bind_param("s", $token);
+    $stmt->execute();
+    $stmt->store_result();
+    $stmt->bind_result($user_id, $username);
+
+    if ($stmt->num_rows > 0) {
+        $stmt->fetch();
+        $_SESSION['admin_logged_in'] = true;
+        $_SESSION['user_id'] = $user_id;
+        $_SESSION['username'] = $username;
+    }
+}
+
 if (!isset($_SESSION['admin_logged_in'])) {
     header("Location: login.php");
     exit;
 }
-include 'database.php';
+
 
 $details_per_page = 3; 
 $total_books_sql = "SELECT COUNT(*) AS total_books FROM booksinfo";
@@ -32,6 +50,7 @@ $result = $conn->query($sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book List</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
             background-image: url('https://images5.alphacoders.com/134/thumb-1920-1346954.png'); 
@@ -52,7 +71,9 @@ $result = $conn->query($sql);
 </head>
 <body class="bg-light">
 <div class="container mt-4">
-    <h1 class="text-center">BOOK LIST</h1>
+    <div class="text-center mb-4">
+        <h1 class="fa-solid fa-book text-dark bg-light"> BOOKS LIST</h1>
+    </div>
 
     <table class="table table-bordered table-striped">
         <thead>

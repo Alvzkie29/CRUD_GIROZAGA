@@ -85,7 +85,7 @@ try {
             <label>Cover Image URL</label>
             <input type="text" name="cover_image" class="form-control" value="<?= $row['cover_image'] ?>" required>
         </div>
-        <button type="submit" class="btn btn-warning">Update Book</button>
+        <button type="submit" class="btn btn-warning" onclick="return confirm('Save Changes?')">Update Book</button>
         <a href="index.php" class="btn btn-secondary">Back</a>
     </form>
 </div>
